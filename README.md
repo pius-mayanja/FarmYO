@@ -1,1 +1,1 @@
-Project description
+Farm-YOO is a computer vision-based mobile application designed to help farmers detect and diagnose diseases in maize crops. The solution aims to empower farmers to take early action, minimize crop loss, and improve yield.
