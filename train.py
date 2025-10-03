@@ -16,7 +16,7 @@ test_dir = data_dir/'test'
 torch.manual_seed(42)
 BATCH_SIZE = 16
 EPOCHS = 10
-learning_rate = 1e-4
+learning_rate = 1e-3
 
 # effnetb0_model, effnetb0_transforms = create_effnetb0(num_classes=3, seed=42)
 # effnetb1_model, effnetb1_transforms = create_effnetb1(num_classes=3, seed=42)
@@ -43,7 +43,7 @@ vit_results = train_test(epochs=10,
                         optimizer=optimizer_vit)
 
 model_save_folder = Path('./Trained-models')
-model_name = f'ViT-lr-{learning_rate}-batch-{BATCH_SIZE}.pth'
+model_name = f'ViT-lr-{learning_rate}-batch-{BATCH_SIZE}-(!ls).pth'
 model_save_folder.mkdir(parents=True, exist_ok=True)
 
 model_save_path = model_save_folder/model_name
@@ -54,7 +54,7 @@ print(f'[INFO] Saved {model_name} to {model_save_path}')
 print("")
 
 with open(model_save_folder/'results.txt', "a") as f:
-    f.write(f'Results for learning rate of {learning_rate} and batch size of {BATCH_SIZE}:\n\t')
+    f.write(f'Results for learning rate of {learning_rate} and batch size of {BATCH_SIZE}-(!ls):\n\t')
     f.write(str(vit_results))
     f.write(' ')
 

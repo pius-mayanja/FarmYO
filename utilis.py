@@ -13,9 +13,10 @@ from typing import Tuple, List, Dict
 def supervisely_to_standardFormat(folder, ann_pth, destination_folder, train_ratio):
     """
     Args:
-        ann_pth (str or Path): Path to the annotations folder from the supervisely folder.
         folder: (str or Path): Path to the image folder from the supervisely folder.
+        ann_pth (str or Path): Path to the annotations folder from the supervisely folder.
         destination folder: (str or Path): Path to the folder that will store data in data format.
+        train_ration: (float): Portion of data that goes to training
     """
     anns_dir = Path(ann_pth)
     img_dir = Path(folder)
@@ -23,6 +24,8 @@ def supervisely_to_standardFormat(folder, ann_pth, destination_folder, train_rat
     demo_path = Path('./DemoFolder')
 
     demo_path.mkdir(parents=True, exist_ok=True)
+
+    no_image = []
 
     if not anns_dir.exists() or not anns_dir.is_dir(): # ---> check if provided path exists and it's a folder
         print(f"[ERROR] No annotations folder found at: {ann_pth}. Please check the path.")
@@ -46,7 +49,8 @@ def supervisely_to_standardFormat(folder, ann_pth, destination_folder, train_rat
         image_path = img_dir/ann_file.name.replace(".json", "")
 
         if not image_path.exists():
-            print(f"[WARNING] No matching image found for {ann_file.name} -> {image_path.name}")
+            # print(f"[WARNING] No matching image found for {ann_file.name} -> {image_path.name}")
+            no_image.append(ann_file)
         
         try:
             with open(ann_file, "r") as f:
@@ -71,6 +75,7 @@ def supervisely_to_standardFormat(folder, ann_pth, destination_folder, train_rat
         except Exception as e:
             print(f'[INFO] Error occured: {e}')
 
+    print(f'{len(no_image)} ann files have no images')
     print(f'[INFO] Moved images from {folder} to {demo_path}')
     
     for class_dir in demo_path.iterdir():
@@ -82,7 +87,6 @@ def supervisely_to_standardFormat(folder, ann_pth, destination_folder, train_rat
 
         total = len(images)
         train_split = int(train_ratio * total)
-        test_split = int((1-train_ratio) * total)
 
         split_images = {
             "train": images[:train_split],
